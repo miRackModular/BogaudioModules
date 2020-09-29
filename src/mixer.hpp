@@ -41,6 +41,7 @@ struct MixerChannel {
 	{
 		setSampleRate(sampleRate);
 		_rms.setSensitivity(0.05f);
+		_levelSL._last = minDecibels;
 	}
 
 	void setSampleRate(float sampleRate);
@@ -69,7 +70,6 @@ struct MuteButton : ToggleButton {
 
 	inline void setRandomize(bool randomize) { _randomize = randomize; }
 	void randomize() override;
-	void onButton(const event::Button& e) override;
 };
 
 struct SoloMuteButton : ParamWidget {
@@ -80,8 +80,8 @@ struct SoloMuteButton : ParamWidget {
 	SoloMuteButton();
 	void reset() override;
 	void randomize() override;
-	void onButton(const event::Button& e) override;
-	void onChange(const event::Change& e) override;
+	void onDragStart(event::DragStart& e) override;
+	void onChange(event::Change& e) override;
 };
 
 } // namespace bogaudio

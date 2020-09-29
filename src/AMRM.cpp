@@ -88,10 +88,10 @@ struct AMRMWidget : BGModuleWidget {
 	void contextMenu(Menu* menu) override {
 		auto m = dynamic_cast<AMRM*>(module);
 		assert(m);
-		OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
-		p->addItem(OptionMenuItem("CAR input", [m]() { return m->_polyInputID == AMRM::CARRIER_INPUT; }, [m]() { m->_polyInputID = AMRM::CARRIER_INPUT; }));
-		p->addItem(OptionMenuItem("MOD input", [m]() { return m->_polyInputID == AMRM::MODULATOR_INPUT; }, [m]() { m->_polyInputID = AMRM::MODULATOR_INPUT; }));
-		OptionsMenuItem::addToMenu(p, menu);
+		// OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
+		// p->addItem(OptionMenuItem("CAR input", [m]() { return m->_polyInputID == AMRM::CARRIER_INPUT; }, [m]() { m->_polyInputID = AMRM::CARRIER_INPUT; }));
+		// p->addItem(OptionMenuItem("MOD input", [m]() { return m->_polyInputID == AMRM::MODULATOR_INPUT; }, [m]() { m->_polyInputID = AMRM::MODULATOR_INPUT; }));
+		// OptionsMenuItem::addToMenu(p, menu);
 	}
 };
 

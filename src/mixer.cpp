@@ -71,19 +71,6 @@ void MuteButton::randomize() {
 	}
 }
 
-void MuteButton::onButton(const event::Button& e) {
-	if (!(e.action == GLFW_PRESS && (e.mods & RACK_MOD_MASK) == 0)) {
-		return;
-	}
-
-	if (e.button == GLFW_MOUSE_BUTTON_RIGHT) {
-		e.consume(this);
-	}
-	else {
-		ToggleButton::onButton(e);
-	}
-}
-
 
 SoloMuteButton::SoloMuteButton() {
 	shadow = new CircularShadow();
@@ -106,47 +93,36 @@ SoloMuteButton::SoloMuteButton() {
 }
 
 void SoloMuteButton::reset() {
-	if (paramQuantity) {
-		paramQuantity->setValue(0.0f);
-	}
+	// if (paramQuantity) {
+		setValue(0.0f);
+	// }
 }
 
 void SoloMuteButton::randomize() {
-	if (paramQuantity) {
-		paramQuantity->setValue(random::uniform() > 0.5f ? 1.0f : 0.0f);
-	}
+	// if (paramQuantity) {
+		setValue(random::uniform() > 0.5f ? 1.0f : 0.0f);
+	// }
 }
 
-void SoloMuteButton::onButton(const event::Button& e) {
-	if (!paramQuantity || !(e.action == GLFW_PRESS && (e.mods & RACK_MOD_MASK) == 0)) {
-		ParamWidget::onButton(e);
-		return;
-	}
-
-	float value = paramQuantity->getValue();
+void SoloMuteButton::onDragStart(event::DragStart& e) {
+	float value = getValue();
 	if (value >= 2.0f) {
-		paramQuantity->setValue(value - 2.0f);
+		setValue(value - 2.0f);
 	}
-	else if (e.button == GLFW_MOUSE_BUTTON_RIGHT) {
-		paramQuantity->setValue(value + 2.0f);
+	else if (api0::windowIsShiftPressed()) {
+		setValue(value + 2.0f);
 	}
 	else {
-		paramQuantity->setValue(value > 0.5f ? 0.0f : 1.0f);
-	}
-
-	if (e.button == GLFW_MOUSE_BUTTON_RIGHT) {
-		e.consume(this);
-	} else {
-		ParamWidget::onButton(e);
+		setValue(value > 0.5f ? 0.0f : 1.0f);
 	}
 }
 
-void SoloMuteButton::onChange(const event::Change& e) {
+void SoloMuteButton::onChange(event::Change& e) {
 	assert(_frames.size() == 4);
-	if (paramQuantity) {
-		float value = paramQuantity->getValue();
+	// if (paramQuantity) {
+		float value = getValue();
 		assert(value >= 0.0f && value <= 3.0f);
 		_svgWidget->setSvg(_frames[(int)value]);
-	}
+	// }
 	ParamWidget::onChange(e);
 }

@@ -71,13 +71,11 @@ struct IndicatorKnob : Knob, SkinnableWidget {
 		void draw(const DrawArgs& args) override;
 	};
 
-	widget::FramebufferWidget* fb;
 	CircularShadow* shadow;
 	IKWidget* w;
 
 	IndicatorKnob(int dim);
-	void onHover(const event::Hover& e) override;
-	void onChange(const event::Change& e) override;
+	void onChange(event::Change& e) override;
 	inline void setDrawColorsCallback(std::function<bool()> fn) { w->_drawColorsCB = fn; }
 	void redraw();
 	void skinChanged(const std::string& skin) override;
@@ -110,7 +108,7 @@ struct Button18 : SvgSwitch {
 	Button18();
 };
 
-struct StatefulButton : ParamWidget {
+struct StatefulButton : V1_COMPAT_W<ParamWidget> {
 	std::vector<std::shared_ptr<Svg>> _frames;
 	SvgWidget* _svgWidget; // deleted elsewhere.
 	CircularShadow* shadow = NULL;
@@ -118,9 +116,8 @@ struct StatefulButton : ParamWidget {
 	StatefulButton(const char* offSvgPath, const char* onSvgPath);
 	void reset() override;
 	void randomize() override;
-	void onDragStart(const event::DragStart& e) override;
-	void onDragEnd(const event::DragEnd& e) override;
-	void onDoubleClick(const event::DoubleClick& e) override {}
+	void onDragStart(event::DragStart& e) override;
+	void onDragEnd(event::DragEnd& e) override;
 };
 
 struct StatefulButton9 : StatefulButton {
@@ -153,22 +150,22 @@ struct InvertingIndicatorButton : ParamWidget {
 		void draw(const DrawArgs& args) override;
 	};
 
-	widget::FramebufferWidget* fb;
 	CircularShadow* shadow;
 	IIBWidget* w;
 	std::function<bool()> clickToInvertCB;
+	std::function<bool()> shiftToInvertCB;
 	std::function<void(int, float)> onChangeCB;
 
 	InvertingIndicatorButton(int dim);
 
 	inline void setClickToInvertCallback(std::function<bool()> fn) { clickToInvertCB = fn; }
+	inline void setShiftToInvertCallback(std::function<bool()> fn) { shiftToInvertCB = fn; }
 	inline void setOnChangeCallback(std::function<void(int, float)> fn) { onChangeCB = fn; }
 	void reset() override;
 	void randomize() override;
-	void onHover(const event::Hover& e) override;
-	void onDoubleClick(const event::DoubleClick& e) override {}
-	void onButton(const event::Button& e) override;
-	void onChange(const event::Change& e) override;
+	void draw(const DrawArgs& args) override;
+	void onDragStart(event::DragStart& e) override;
+	void onChange(event::Change& e) override;
 };
 
 struct InvertingIndicatorButton9 : InvertingIndicatorButton {
@@ -188,6 +185,7 @@ struct VUSlider : SliderKnob {
 
 	VUSlider(float height = 183.0f) {
 		box.size = Vec(18.0f, height);
+		speed = 1.6;		
 	}
 
 	inline void setVULevel(float* level) {

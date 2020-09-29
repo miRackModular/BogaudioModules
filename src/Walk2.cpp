@@ -196,8 +196,8 @@ struct Walk2Display : TransparentWidget {
 	{
 	}
 
-	void onButton(const event::Button& e) override {
-		if (!(e.action == GLFW_PRESS && e.button == GLFW_MOUSE_BUTTON_LEFT && (e.mods & RACK_MOD_MASK) == 0)) {
+	void onMouseDown(event::MouseDown& e) override {
+		if (e.button != GLFW_MOUSE_BUTTON_LEFT) {
 			return;
 		}
 		e.consume(this);
@@ -205,7 +205,7 @@ struct Walk2Display : TransparentWidget {
 		maybeJump(e.pos);
 	}
 
-	void onDragMove(const event::DragMove& e) override {
+	void onDragMove(event::DragMove& e) override {
 		float zoom = APP->scene->rackScroll->zoomWidget->zoom;
 		_dragLast.x += e.mouseDelta.x / zoom;
 		_dragLast.y += e.mouseDelta.y / zoom;
@@ -294,63 +294,64 @@ struct Walk2Display : TransparentWidget {
 		nvgStrokeWidth(args.vg, strokeWidth);
 
 		nvgBeginPath(args.vg);
+		nvgAllowMergeSubpaths(args.vg);
 		nvgMoveTo(args.vg, _insetAround, _midY);
 		nvgLineTo(args.vg, _insetAround + _drawSize.x, _midY);
-		nvgStroke(args.vg);
+		// nvgStroke(args.vg);
 
-		nvgBeginPath(args.vg);
+		// nvgBeginPath(args.vg);
 		nvgMoveTo(args.vg, _midX, _insetAround);
 		nvgLineTo(args.vg, _midX, _insetAround + _drawSize.y);
-		nvgStroke(args.vg);
+		// nvgStroke(args.vg);
 
 		for (int i = 1; i <= 10; ++i) {
 			float tick = i % 5 == 0 ? longTick : shortTick;
 
 			float x = (i * 0.1f) * 0.5f * _drawSize.x;
-			nvgBeginPath(args.vg);
+			// nvgBeginPath(args.vg);
 			nvgMoveTo(args.vg, _midX + x, _midY - tick);
 			nvgLineTo(args.vg, _midX + x, _midY + tick);
-			nvgStroke(args.vg);
+			// nvgStroke(args.vg);
 
-			nvgBeginPath(args.vg);
+			// nvgBeginPath(args.vg);
 			nvgMoveTo(args.vg, _midX - x, _midY - tick);
 			nvgLineTo(args.vg, _midX - x, _midY + tick);
-			nvgStroke(args.vg);
+			// nvgStroke(args.vg);
 
 			float y = (i * 0.1f) * 0.5f * _drawSize.y;
-			nvgBeginPath(args.vg);
+			// nvgBeginPath(args.vg);
 			nvgMoveTo(args.vg, _midX - tick, _midY + y);
 			nvgLineTo(args.vg, _midX + tick, _midY + y);
-			nvgStroke(args.vg);
+			// nvgStroke(args.vg);
 
-			nvgBeginPath(args.vg);
+			// nvgBeginPath(args.vg);
 			nvgMoveTo(args.vg, _midX - tick, _midY - y);
 			nvgLineTo(args.vg, _midX + tick, _midY - y);
-			nvgStroke(args.vg);
+			// nvgStroke(args.vg);
 
 			if (!_module || _module->_drawGrid) {
 				for (int j = 1; j <= 10; ++j) {
 					float y = (j * 0.1f) * 0.5f * _drawSize.y;
 
-					nvgBeginPath(args.vg);
+					// nvgBeginPath(args.vg);
 					nvgMoveTo(args.vg, _midX + x - dot, _midY + y);
 					nvgLineTo(args.vg, _midX + x + dot, _midY + y);
-					nvgStroke(args.vg);
+					// nvgStroke(args.vg);
 
-					nvgBeginPath(args.vg);
+					// nvgBeginPath(args.vg);
 					nvgMoveTo(args.vg, _midX - x - dot, _midY + y);
 					nvgLineTo(args.vg, _midX - x + dot, _midY + y);
-					nvgStroke(args.vg);
+					// nvgStroke(args.vg);
 
-					nvgBeginPath(args.vg);
+					// nvgBeginPath(args.vg);
 					nvgMoveTo(args.vg, _midX - x - dot, _midY - y);
 					nvgLineTo(args.vg, _midX - x + dot, _midY - y);
-					nvgStroke(args.vg);
+					// nvgStroke(args.vg);
 
-					nvgBeginPath(args.vg);
+					// nvgBeginPath(args.vg);
 					nvgMoveTo(args.vg, _midX + x - dot, _midY - y);
 					nvgLineTo(args.vg, _midX + x + dot, _midY - y);
-					nvgStroke(args.vg);
+					// nvgStroke(args.vg);
 				}
 			}
 		}
@@ -361,59 +362,60 @@ struct Walk2Display : TransparentWidget {
 				float x = _midX - _drawSize.x / 4;
 				float y = _midY - _drawSize.y / 4;
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x - tick, y);
 				nvgLineTo(args.vg, x + tick, y);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x, y - tick);
 				nvgLineTo(args.vg, x, y + tick);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 			}
 			{
 				float x = _midX + _drawSize.x / 4;
 				float y = _midY - _drawSize.y / 4;
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x - tick, y);
 				nvgLineTo(args.vg, x + tick, y);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x, y - tick);
 				nvgLineTo(args.vg, x, y + tick);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 			}
 			{
 				float x = _midX + _drawSize.x / 4;
 				float y = _midY + _drawSize.y / 4;
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x - tick, y);
 				nvgLineTo(args.vg, x + tick, y);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x, y - tick);
 				nvgLineTo(args.vg, x, y + tick);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 			}
 			{
 				float x = _midX - _drawSize.x / 4;
 				float y = _midY + _drawSize.y / 4;
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x - tick, y);
 				nvgLineTo(args.vg, x + tick, y);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 
-				nvgBeginPath(args.vg);
+				// nvgBeginPath(args.vg);
 				nvgMoveTo(args.vg, x, y - tick);
 				nvgLineTo(args.vg, x, y + tick);
-				nvgStroke(args.vg);
+				// nvgStroke(args.vg);
 			}
 		}
+		nvgStroke(args.vg);		
 
 		nvgRestore(args.vg);
 	}

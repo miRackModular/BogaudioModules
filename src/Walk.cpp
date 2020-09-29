@@ -163,12 +163,12 @@ struct WalkWidget : BGModuleWidget {
 		auto m = dynamic_cast<Walk*>(module);
 		assert(m);
 
-		OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
-		p->addItem(OptionMenuItem("RATE input", [m]() { return m->_polyInputID == Walk::RATE_INPUT; }, [m]() { m->_polyInputID = Walk::RATE_INPUT; }));
-		p->addItem(OptionMenuItem("OFFSET input", [m]() { return m->_polyInputID == Walk::OFFSET_INPUT; }, [m]() { m->_polyInputID = Walk::OFFSET_INPUT; }));
-		p->addItem(OptionMenuItem("SCALE input", [m]() { return m->_polyInputID == Walk::SCALE_INPUT; }, [m]() { m->_polyInputID = Walk::SCALE_INPUT; }));
-		p->addItem(OptionMenuItem("JUMP input", [m]() { return m->_polyInputID == Walk::JUMP_INPUT; }, [m]() { m->_polyInputID = Walk::JUMP_INPUT; }));
-		OptionsMenuItem::addToMenu(p, menu);
+		// OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
+		// p->addItem(OptionMenuItem("RATE input", [m]() { return m->_polyInputID == Walk::RATE_INPUT; }, [m]() { m->_polyInputID = Walk::RATE_INPUT; }));
+		// p->addItem(OptionMenuItem("OFFSET input", [m]() { return m->_polyInputID == Walk::OFFSET_INPUT; }, [m]() { m->_polyInputID = Walk::OFFSET_INPUT; }));
+		// p->addItem(OptionMenuItem("SCALE input", [m]() { return m->_polyInputID == Walk::SCALE_INPUT; }, [m]() { m->_polyInputID = Walk::SCALE_INPUT; }));
+		// p->addItem(OptionMenuItem("JUMP input", [m]() { return m->_polyInputID == Walk::JUMP_INPUT; }, [m]() { m->_polyInputID = Walk::JUMP_INPUT; }));
+		// OptionsMenuItem::addToMenu(p, menu);
 
 		OptionsMenuItem* jm = new OptionsMenuItem("Jump input action");
 		jm->addItem(OptionMenuItem("Jump", [m]() { return m->_jumpMode == Walk::JUMP_JUMPMODE; }, [m]() { m->_jumpMode = Walk::JUMP_JUMPMODE; }));

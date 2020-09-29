@@ -261,10 +261,9 @@ struct AnalyzerDisplay : TransparentWidget, AnalyzerTypes {
 		}
 	}
 
-	void onButton(const event::Button& e) override;
-	void onDragMove(const event::DragMove& e) override;
-	void onDragEnd(const event::DragEnd& e) override;
-	void onHoverKey(const event::HoverKey &e) override;
+	void onMouseDown(event::MouseDown& e) override;
+	void onDragMove(event::DragMove& e) override;
+	void onDragEnd(event::DragEnd& e) override;
 	void setChannelBinsReader(int channel, BinsReader* br);
 	void displayChannel(int channel, bool display);
 	void channelLabel(int channel, std::string label);

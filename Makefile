@@ -1,4 +1,5 @@
 
+NO_RACK_SIMD=1
 ifdef EXPERIMENTAL
 FLAGS += -DEXPERIMENTAL=1
 endif
@@ -14,7 +15,7 @@ endif
 DSP_SOURCES = $(wildcard src/dsp/*cpp src/dsp/filters/*cpp)
 SOURCES = $(wildcard src/*.cpp) $(DSP_SOURCES)
 
-DISTRIBUTABLES += $(wildcard LICENSE*) res
+DISTRIBUTABLES += res
 
 RACK_DIR ?= ../..
 include $(RACK_DIR)/plugin.mk

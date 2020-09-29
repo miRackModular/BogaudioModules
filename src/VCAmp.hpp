@@ -42,6 +42,7 @@ struct VCAmp : BGModule {
 		sampleRateChange();
 		for (int c = 0; c < maxChannels; ++c) {
 			_rms[c].setSensitivity(0.05f);
+			_levelSL[c]._last = minDecibels;
 		}
 	}
 

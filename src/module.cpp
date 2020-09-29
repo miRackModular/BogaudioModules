@@ -53,7 +53,7 @@ void BGModule::process(const ProcessArgs& args) {
 			_steps = 0;
 
 			int channelsBefore = _channels;
-			int channelsNow = std::max(1, channels());
+			int channelsNow = 1;
 			if (channelsBefore != channelsNow) {
 				_channels = channelsNow;
 				_inverseChannels = 1.0f / (float)_channels;
@@ -73,15 +73,11 @@ void BGModule::process(const ProcessArgs& args) {
 			}
 
 			modulate();
-			for (int i = 0; i < _channels; ++i) {
-				modulateChannel(i);
-			}
+			modulateChannel(0);
 		}
 
 		processAll(args);
-		for (int i = 0; i < _channels; ++i) {
-			processChannel(args, i);
-		}
+		processChannel(args, 0);
 		postProcess(args);
 	}
 	postProcessAlways(args);
@@ -178,7 +174,12 @@ void BGModuleWidget::appendContextMenu(Menu* menu) {
 		}
 	}
 
+	auto sep = new MenuEntry;
+	menu->addChild(sep);
+	auto size = menu->children.size();
 	contextMenu(menu);
+	if (menu->children.size() == size)
+		menu->removeChild(sep);
 }
 
 void BGModuleWidget::skinChanged(const std::string& skin) {
@@ -229,10 +230,6 @@ void BGModuleWidget::updatePanel() {
 		return;
 	}
 	_loadedSkin = skin;
-	if (_panel) {
-		_panel->requestDelete();
-		_panel = NULL;
-	}
 
 	std::string svg = "res/" + _slug;
 	if (skin != "light") {
@@ -240,10 +237,7 @@ void BGModuleWidget::updatePanel() {
 		svg += skin;
 	}
 	svg += ".svg";
-	_panel = new SvgPanel();
-	_panel->box.size = _size;
-	addChildBottom(_panel);
-	_panel->setBackground(APP->window->loadSvg(asset::plugin(pluginInstance, svg)));
+	ModuleWidget::setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, svg)));
 }
 
 void BGModuleWidget::createScrews() {

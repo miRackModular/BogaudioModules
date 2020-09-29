@@ -150,9 +150,9 @@ void init(rack::Plugin *p) {
 	p->addModel(modelMegaGate);
 	p->addModel(modelPEQ);
 	p->addModel(modelPEQ6);
-	p->addModel(modelPEQ6XF);
+	// p->addModel(modelPEQ6XF);
 	p->addModel(modelPEQ14);
-	p->addModel(modelPEQ14XF);
+	// p->addModel(modelPEQ14XF);
 
 	p->addModel(modelDADSRH);
 	p->addModel(modelDADSRHPlus);
@@ -173,9 +173,9 @@ void init(rack::Plugin *p) {
 	p->addModel(modelWalk);
 
 	p->addModel(modelMix8);
-	p->addModel(modelMix8x);
+	// p->addModel(modelMix8x);
 	p->addModel(modelMix4);
-	p->addModel(modelMix4x);
+	// p->addModel(modelMix4x);
 	p->addModel(modelMix2);
 	p->addModel(modelMix1);
 	p->addModel(modelVCM);
@@ -191,10 +191,10 @@ void init(rack::Plugin *p) {
 	p->addModel(modelMatrix81);
 	p->addModel(modelMatrix18);
 	p->addModel(modelMatrix44);
-	p->addModel(modelMatrix44Cvm);
+	// p->addModel(modelMatrix44Cvm);
 	p->addModel(modelMatrix88);
-	p->addModel(modelMatrix88Cv);
-	p->addModel(modelMatrix88M);
+	// p->addModel(modelMatrix88Cv);
+	// p->addModel(modelMatrix88M);
 	p->addModel(modelSwitch81);
 	p->addModel(modelSwitch18);
 	p->addModel(modelSwitch44);
@@ -211,9 +211,9 @@ void init(rack::Plugin *p) {
 	p->addModel(modelOneEight);
 	p->addModel(modelEightOne);
 	p->addModel(modelAddrSeq);
-	p->addModel(modelAddrSeqX);
+	// p->addModel(modelAddrSeqX);
 	p->addModel(modelPgmr);
-	p->addModel(modelPgmrX);
+	// p->addModel(modelPgmrX);
 
 	p->addModel(modelVU);
 	p->addModel(modelAnalyzer);
@@ -224,15 +224,16 @@ void init(rack::Plugin *p) {
 	p->addModel(modelStack);
 	p->addModel(modelReftone);
 
-	p->addModel(modelMono);
-	p->addModel(modelArp);
-	p->addModel(modelAssign);
-	p->addModel(modelUnison);
-	p->addModel(modelPolyCon8);
-	p->addModel(modelPolyCon16);
-	p->addModel(modelPolyOff8);
-	p->addModel(modelPolyOff16);
-	p->addModel(modelPolyMult);
+	// poly
+	// p->addModel(modelMono);
+	// p->addModel(modelArp);
+	// p->addModel(modelAssign);
+	// p->addModel(modelUnison);
+	// p->addModel(modelPolyCon8);
+	// p->addModel(modelPolyCon16);
+	// p->addModel(modelPolyOff8);
+	// p->addModel(modelPolyOff16);
+	// p->addModel(modelPolyMult);
 
 	p->addModel(modelBool);
 	p->addModel(modelCmp);
@@ -252,8 +253,8 @@ void init(rack::Plugin *p) {
 
 #ifdef EXPERIMENTAL
 	p->addModel(modelLag);
-	p->addModel(modelPEQ14XR);
-	p->addModel(modelPEQ14XV);
+	// p->addModel(modelPEQ14XR);
+	// p->addModel(modelPEQ14XV);
 #endif
 
 #ifdef TEST

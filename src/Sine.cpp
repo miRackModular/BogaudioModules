@@ -155,10 +155,10 @@ struct SineWidget : BGModuleWidget {
 
 		menu->addChild(new BoolOptionMenuItem("Linear frequency mode", [m]() { return &m->_linearMode; }));
 
-		OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
-		p->addItem(OptionMenuItem("V/OCT input", [m]() { return m->_polyInputID == Sine::PITCH_INPUT; }, [m]() { m->_polyInputID = Sine::PITCH_INPUT; }));
-		p->addItem(OptionMenuItem("FM input", [m]() { return m->_polyInputID == Sine::FM_INPUT; }, [m]() { m->_polyInputID = Sine::FM_INPUT; }));
-		OptionsMenuItem::addToMenu(p, menu);
+		// OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
+		// p->addItem(OptionMenuItem("V/OCT input", [m]() { return m->_polyInputID == Sine::PITCH_INPUT; }, [m]() { m->_polyInputID = Sine::PITCH_INPUT; }));
+		// p->addItem(OptionMenuItem("FM input", [m]() { return m->_polyInputID == Sine::FM_INPUT; }, [m]() { m->_polyInputID = Sine::FM_INPUT; }));
+		// OptionsMenuItem::addToMenu(p, menu);
 	}
 };
 

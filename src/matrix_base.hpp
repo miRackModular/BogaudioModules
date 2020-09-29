@@ -95,13 +95,13 @@ struct SwitchMatrixModule : MatrixModule {
 	enum Inverting {
 		CLICK_INVERTING,
 		PARAM_INVERTING,
+		SHIFT_INVERTING,
 		NO_INVERTING
 	};
 
-	Inverting _inverting = NO_INVERTING;
+	Inverting _inverting = SHIFT_INVERTING;
 	bool _rowExclusive = false;
 	bool _columnExclusive = false;
-	std::vector<ParamQuantity*> _switchParamQuantities;
 
 	SwitchMatrixModule(int ins, int outs, int firstParamID, int firstInputID, int firstOutputID)
 	: MatrixModule(ins, outs, firstParamID, firstInputID, firstOutputID)
@@ -121,6 +121,7 @@ struct SwitchMatrixModuleWidget : MatrixModuleWidget {
 		auto s = dynamic_cast<W*>(createParam<W>(position, module, id));
 		if (module) {
 			s->setClickToInvertCallback([module]() { return module->_inverting == SwitchMatrixModule::CLICK_INVERTING; });
+			s->setShiftToInvertCallback([module]() { return module->_inverting == SwitchMatrixModule::SHIFT_INVERTING && api0::windowIsShiftPressed(); });
 			s->setOnChangeCallback([module](int id, float value) { module->switchChanged(id, value); });
 		}
 		addParam(s);

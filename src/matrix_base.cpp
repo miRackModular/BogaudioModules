@@ -223,6 +223,7 @@ void KnobMatrixModuleWidget::contextMenu(Menu* menu) {
 #define INVERTING "inverting"
 #define INVERTING_CLICK "click"
 #define INVERTING_PARAM "param"
+#define INVERTING_SHIFT "shift"
 #define INVERTING_DISABLED "disabled"
 
 #define ROW_EXCLUSIVE "row_exclusive"
@@ -238,6 +239,10 @@ json_t* SwitchMatrixModule::toJson(json_t* root) {
 		}
 		case PARAM_INVERTING: {
 			json_object_set_new(root, INVERTING, json_string(INVERTING_PARAM));
+			break;
+		}
+		case SHIFT_INVERTING: {
+			json_object_set_new(root, INVERTING, json_string(INVERTING_SHIFT));
 			break;
 		}
 		case NO_INVERTING: {
@@ -265,6 +270,9 @@ void SwitchMatrixModule::fromJson(json_t* root) {
 			else if (0 == strcmp(INVERTING_PARAM, s)) {
 				setInverting(PARAM_INVERTING);
 			}
+			else if (0 == strcmp(INVERTING_SHIFT, s)) {
+				setInverting(SHIFT_INVERTING);
+			}
 			else if (0 == strcmp(INVERTING_DISABLED, s)) {
 				setInverting(NO_INVERTING);
 			}
@@ -287,6 +295,7 @@ void SwitchMatrixModule::setInverting(Inverting inverting) {
 	float minValue = -1.0f;
 	switch (_inverting) {
 		case CLICK_INVERTING:
+		case SHIFT_INVERTING:
 		case PARAM_INVERTING: {
 			minValue = -1.0f;
 			break;
@@ -295,17 +304,17 @@ void SwitchMatrixModule::setInverting(Inverting inverting) {
 			minValue = 0.0f;
 		}
 	}
-	for (ParamQuantity* pq : _switchParamQuantities) {
-		pq->minValue = minValue;
-		if (pq->getValue() < minValue) {
-			pq->setValue(minValue);
+	for (int i = 0; i < _ins; ++i) {
+		for (int j = 0; j < _outs; ++j) {
+			int ii = j * _ins + i;
+			if (params[_firstParamID + ii].getValue() < minValue)
+				params[_firstParamID + ii].setValue(minValue);
 		}
 	}
 }
 
 void SwitchMatrixModule::configSwitchParam(int id, const char* label) {
 	configParam(id, -1.0f, 1.0f, 0.0f, label, "%", 0.0f, 100.0f);
-	_switchParamQuantities.push_back(paramQuantities[id]);
 }
 
 void SwitchMatrixModule::switchChanged(int id, float value) {
@@ -315,19 +324,19 @@ void SwitchMatrixModule::switchChanged(int id, float value) {
 
 		if (_rowExclusive) {
 			for (int i = 0; i < col; ++i) {
-				_switchParamQuantities[i * _ins + row]->setValue(0.0f);
+				params[_firstParamID + i * _ins + row].setValue(0.0f);
 			}
 			for (int i = col + 1; i < _outs; ++i) {
-				_switchParamQuantities[i * _ins + row]->setValue(0.0f);
+				params[_firstParamID + i * _ins + row].setValue(0.0f);
 			}
 		}
 
 		if (_columnExclusive) {
 			for (int i = 0; i < row; ++i) {
-				_switchParamQuantities[col * _ins + i]->setValue(0.0f);
+				params[_firstParamID + col * _ins + i].setValue(0.0f);
 			}
 			for (int i = row + 1; i < _ins; ++i) {
-				_switchParamQuantities[col * _ins + i]->setValue(0.0f);
+				params[_firstParamID + col * _ins + i].setValue(0.0f);
 			}
 		}
 	}
@@ -339,13 +348,13 @@ void SwitchMatrixModule::setRowExclusive(bool e) {
 		for (int i = 0; i < _ins; ++i) {
 			int j = 0;
 			for (; j < _outs; ++j) {
-				if (_switchParamQuantities[j * _ins + i]->getValue() != 0.0f) {
+				if (params[_firstParamID + j * _ins + i].getValue() != 0.0f) {
 					break;
 				}
 			}
 			++j;
 			for (; j < _outs; ++j) {
-				_switchParamQuantities[j * _ins + i]->setValue(0.0f);
+				params[_firstParamID + j * _ins + i].setValue(0.0f);
 			}
 		}
 	}
@@ -357,13 +366,13 @@ void SwitchMatrixModule::setColumnExclusive(bool e) {
 		for (int i = 0; i < _outs; ++i) {
 			int j = 0;
 			for (; j < _ins; ++j) {
-				if (_switchParamQuantities[i * _ins + j]->getValue() != 0.0f) {
+				if (params[_firstParamID + i * _ins + j].getValue() != 0.0f) {
 					break;
 				}
 			}
 			++j;
 			for (; j < _ins; ++j) {
-				_switchParamQuantities[i * _ins + j]->setValue(0.0f);
+				params[_firstParamID + i * _ins + j].setValue(0.0f);
 			}
 		}
 	}
@@ -376,8 +385,7 @@ void SwitchMatrixModuleWidget::contextMenu(Menu* menu) {
 	MatrixModuleWidget::contextMenu(menu);
 
 	OptionsMenuItem* i = new OptionsMenuItem("Inverting");
-	i->addItem(OptionMenuItem("Disabled", [m]() { return m->_inverting == SwitchMatrixModule::NO_INVERTING; }, [m]() { m->setInverting(SwitchMatrixModule::NO_INVERTING); }));
-	i->addItem(OptionMenuItem("By param entry (right-click)", [m]() { return m->_inverting == SwitchMatrixModule::PARAM_INVERTING; }, [m]() { m->setInverting(SwitchMatrixModule::PARAM_INVERTING); }));
+	i->addItem(OptionMenuItem("In SHIFT mode", [m]() { return m->_inverting == SwitchMatrixModule::SHIFT_INVERTING; }, [m]() { m->setInverting(SwitchMatrixModule::SHIFT_INVERTING); }));
 	i->addItem(OptionMenuItem("On second click", [m]() { return m->_inverting == SwitchMatrixModule::CLICK_INVERTING; }, [m]() { m->setInverting(SwitchMatrixModule::CLICK_INVERTING); }));
 	OptionsMenuItem::addToMenu(i, menu);
 

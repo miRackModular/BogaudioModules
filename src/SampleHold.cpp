@@ -194,12 +194,12 @@ struct SampleHoldWidget : BGModuleWidget {
 	void contextMenu(Menu* menu) override {
 		auto m = dynamic_cast<SampleHold*>(module);
 		assert(m);
-		{
-			OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
-			p->addItem(OptionMenuItem("GATE input", [m]() { return m->_polyInputID == SampleHold::TRIGGER1_INPUT; }, [m]() { m->_polyInputID = SampleHold::TRIGGER1_INPUT; }));
-			p->addItem(OptionMenuItem("IN input", [m]() { return m->_polyInputID == SampleHold::IN1_INPUT; }, [m]() { m->_polyInputID = SampleHold::IN1_INPUT; }));
-			OptionsMenuItem::addToMenu(p, menu);
-		}
+		// {
+		// 	OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
+		// 	p->addItem(OptionMenuItem("GATE input", [m]() { return m->_polyInputID == SampleHold::TRIGGER1_INPUT; }, [m]() { m->_polyInputID = SampleHold::TRIGGER1_INPUT; }));
+		// 	p->addItem(OptionMenuItem("IN input", [m]() { return m->_polyInputID == SampleHold::IN1_INPUT; }, [m]() { m->_polyInputID = SampleHold::IN1_INPUT; }));
+		// 	OptionsMenuItem::addToMenu(p, menu);
+		// }
 		{
 			OptionsMenuItem* mi = new OptionsMenuItem("Normal noise");
 			mi->addItem(OptionMenuItem("Blue", [m]() { return m->_noiseType == SampleHold::BLUE_NOISE_TYPE; }, [m]() { m->_noiseType = SampleHold::BLUE_NOISE_TYPE; }));

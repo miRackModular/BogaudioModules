@@ -22,7 +22,7 @@ struct BGModule : Module {
 	int _channels = 0;
 	float _inverseChannels = 0.0f;
 
-	bool _skinnable = true;
+	bool _skinnable = false;
 	std::string _skin = "default";
 	std::vector<SkinChangeListener*> _skinChangeListeners;
 
@@ -63,7 +63,7 @@ struct BGModule : Module {
 };
 
 struct BGModuleWidget : ModuleWidget, SkinChangeListener, DefaultSkinChangeListener {
-	bool _skinnable = true;
+	bool _skinnable = false;
 	SvgPanel* _panel = NULL;
 	Vec _size;
 	std::string _slug;
@@ -81,7 +81,7 @@ struct BGModuleWidget : ModuleWidget, SkinChangeListener, DefaultSkinChangeListe
 
 	void skinChanged(const std::string& skin) override;
 	void defaultSkinChanged(const std::string& skin) override;
-	void setPanel(Vec size, const std::string slug, bool skinnable = true);
+	void setPanel(Vec size, const std::string slug, bool skinnable = false);
 	void updatePanel();
 	void createScrews();
 };

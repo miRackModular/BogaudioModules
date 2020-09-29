@@ -177,7 +177,7 @@ void RGate::processChannel(const ProcessArgs& args, int c) {
 	outputs[GATE_OUTPUT].setVoltage(out, c);
 }
 
-struct IPQuantity : Quantity {
+/*struct IPQuantity : Quantity {
 	RGate* _module;
 
 	IPQuantity(RGate* m) : _module(m) {}
@@ -203,15 +203,29 @@ struct IPQuantity : Quantity {
 	void setDisplayValue(float displayValue) override { setValue(displayValue / 1000.0f); }
 	std::string getLabel() override { return "Initial clock"; }
 	std::string getUnit() override { return "ms"; }
-};
+};*/
 
 struct IPSlider : ui::Slider {
+	RGate* _module;
 	IPSlider(RGate* module) {
-		quantity = new IPQuantity(module);
+		_module = module;
+
+		minValue = 0;
+		maxValue = 1000;
+		defaultValue = RGate::defaultInitialClockPeriod * 1000;
+		value = module->_initialClockPeriod * 1000;
+		label = "Initial clock";
+		unit = "ms";
+		precision = 0;
+
 		box.size.x = 200.0f;
 	}
 	virtual ~IPSlider() {
-		delete quantity;
+		// delete quantity;
+	}
+
+	virtual void onChange(event::Change& e) override {
+		_module->_initialClockPeriod = value * 0.001;
 	}
 };
 
@@ -270,14 +284,14 @@ struct RGateWidget : BGModuleWidget {
 		auto m = dynamic_cast<RGate*>(module);
 		assert(m);
 
-		OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
-		p->addItem(OptionMenuItem("CLOCK input", [m]() { return m->_polyInputID == RGate::CLOCK_INPUT; }, [m]() { m->_polyInputID = RGate::CLOCK_INPUT; }));
-		p->addItem(OptionMenuItem("LEN input", [m]() { return m->_polyInputID == RGate::LENGTH_INPUT; }, [m]() { m->_polyInputID = RGate::LENGTH_INPUT; }));
-		OptionsMenuItem::addToMenu(p, menu);
+		// OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
+		// p->addItem(OptionMenuItem("CLOCK input", [m]() { return m->_polyInputID == RGate::CLOCK_INPUT; }, [m]() { m->_polyInputID = RGate::CLOCK_INPUT; }));
+		// p->addItem(OptionMenuItem("LEN input", [m]() { return m->_polyInputID == RGate::LENGTH_INPUT; }, [m]() { m->_polyInputID = RGate::LENGTH_INPUT; }));
+		// OptionsMenuItem::addToMenu(p, menu);
 
 		OptionsMenuItem* r = new OptionsMenuItem("RESET mode");
 		r->addItem(OptionMenuItem("Hard: reset clock period and divider", [m]() { return m->_resetMode == RGate::HARD_RESETMODE; }, [m]() {  m->_resetMode = RGate::HARD_RESETMODE; }));
-		r->addItem(OptionMenuItem("Soft: reseet clock divider", [m]() { return m->_resetMode == RGate::SOFT_RESETMODE; }, [m]() {  m->_resetMode = RGate::SOFT_RESETMODE; }));
+		r->addItem(OptionMenuItem("Soft: reset clock divider", [m]() { return m->_resetMode == RGate::SOFT_RESETMODE; }, [m]() {  m->_resetMode = RGate::SOFT_RESETMODE; }));
 		OptionsMenuItem::addToMenu(r, menu);
 
 		menu->addChild(new IPMenuItem(m));

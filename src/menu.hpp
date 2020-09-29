@@ -16,6 +16,7 @@ struct OptionMenuItem : MenuItem {
 	, _set(set)
 	{
 		this->text = label;
+		this->rightText = "✔";
 	}
 
 	void onAction(const event::Action& e) override {

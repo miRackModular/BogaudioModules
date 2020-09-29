@@ -360,10 +360,12 @@ void AnalyzerBaseWidget::addAmplitudePlotContextMenu(Menu* menu, bool linearOpti
 }
 
 
-void AnalyzerDisplay::onButton(const event::Button& e) {
-	if (!(e.action == GLFW_PRESS && e.button == GLFW_MOUSE_BUTTON_LEFT && (e.mods & RACK_MOD_MASK) == 0)) {
+void AnalyzerDisplay::onMouseDown(event::MouseDown& e) {
+	if (!(e.button == GLFW_MOUSE_BUTTON_LEFT)) {
 		return;
 	}
+	if (!api0::windowIsShiftPressed())
+		return;
 	e.consume(this);
 	_freezeMouse = e.pos;
 	_freezeLastBinI = -1;
@@ -386,7 +388,10 @@ void AnalyzerDisplay::onButton(const event::Button& e) {
 	}
 }
 
-void AnalyzerDisplay::onDragMove(const event::DragMove& e) {
+void AnalyzerDisplay::onDragMove(event::DragMove& e) {
+	if (!api0::windowIsShiftPressed())
+		return;
+	
 	float zoom = APP->scene->rackScroll->zoomWidget->zoom;
 	_freezeMouse.x += e.mouseDelta.x / zoom;
 	_freezeMouse.y += e.mouseDelta.y / zoom;
@@ -396,28 +401,12 @@ void AnalyzerDisplay::onDragMove(const event::DragMove& e) {
 	}
 }
 
-void AnalyzerDisplay::onDragEnd(const event::DragEnd& e) {
+void AnalyzerDisplay::onDragEnd(event::DragEnd& e) {
 	_freezeMouse = Vec(0, 0);
 	_freezeDraw = false;
 	if (_freezeBufs) {
 		delete[] _freezeBufs;
 		_freezeBufs = NULL;
-	}
-}
-
-void AnalyzerDisplay::onHoverKey(const event::HoverKey &e) {
-	if (e.key == GLFW_KEY_LEFT) {
-		e.consume(this);
-		if (_freezeLastBinI > 0 && (e.action == GLFW_PRESS || e.action == GLFW_REPEAT)) {
-			_freezeNudgeBin--;
-		}
-	}
-	else if (e.key == GLFW_KEY_RIGHT) {
-		e.consume(this);
-		int binsN = _module->_core._size / _module->_core._binAverageN;
-		if (_freezeLastBinI < binsN - 1 && (e.action == GLFW_PRESS || e.action == GLFW_REPEAT)) {
-			_freezeNudgeBin++;
-		}
 	}
 }
 

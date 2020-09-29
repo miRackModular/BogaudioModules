@@ -115,7 +115,7 @@ int AddressableSequenceModule::nextStep(
 		_select[c] -= _select[c] * reset;
 	}
 	else {
-		select += clamp(selectInput.getPolyVoltage(c), -10.0f, 10.0f) * 0.1f * (float)(n - 1);
+		select += clamp(selectInput.getPolyVoltage(c), -9.99f, 9.99f) * 0.1f * (float)n;
 		if (!_selectOnClock || clock) {
 			_select[c] = select;
 		}
@@ -137,10 +137,10 @@ void AddressableSequenceBaseModuleWidget::contextMenu(Menu* menu) {
 	auto m = dynamic_cast<AddressableSequenceModule*>(module);
 	assert(m);
 
-	OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
-	p->addItem(OptionMenuItem("CLOCK input", [m]() { return m->_polyInputID == m->_clockInputID; }, [m]() { m->_polyInputID = m->_clockInputID; }));
-	p->addItem(OptionMenuItem("SELECT input", [m]() { return m->_polyInputID == m->_selectInputID; }, [m]() { m->_polyInputID = m->_selectInputID; }));
-	OptionsMenuItem::addToMenu(p, menu);
+	// OptionsMenuItem* p = new OptionsMenuItem("Polyphony channels from");
+	// p->addItem(OptionMenuItem("CLOCK input", [m]() { return m->_polyInputID == m->_clockInputID; }, [m]() { m->_polyInputID = m->_clockInputID; }));
+	// p->addItem(OptionMenuItem("SELECT input", [m]() { return m->_polyInputID == m->_selectInputID; }, [m]() { m->_polyInputID = m->_selectInputID; }));
+	// OptionsMenuItem::addToMenu(p, menu);
 
 	menu->addChild(new BoolOptionMenuItem("Reverse step on negative clock", [m]() { return &m->_reverseOnNegativeClock; }));
 	menu->addChild(new BoolOptionMenuItem("Triggered select mode", [m]() { return &m->_triggeredSelect; }));

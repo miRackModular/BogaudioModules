@@ -88,37 +88,69 @@ struct VUDisplay : OpaqueWidget {
 			rPeakDb = amplitudeToDecibels(_module->_rPeakLevel);
 		}
 
-		nvgSave(args.vg);
+		auto vg = args.vg;
+		nvgSave(vg);
+		
+		nvgBeginPath(vg);
+		nvgAllowMergeSubpaths(vg);
+		int mL = 180, mR = 180;
+		int pL = 180, pR = 180;
 		for (int i = 0; i < 180; i += 5) {
-			const Level& l = _levels.at(i / 5);
+			float l = _levels.at(i / 5).db;
 
-			nvgBeginPath(args.vg);
-			nvgRect(args.vg, 3, i + 1, 5, 4);
-			nvgFillColor(args.vg, bgColor);
-			nvgFill(args.vg);
-			if (lPeakDb > l.db && lPeakDb < l.db + 2.0f) {
-				nvgFillColor(args.vg, nvgRGBA(0x00, 0xdd, 0xff, 0xff));
-				nvgFill(args.vg);
+			if (lPeakDb > l && lPeakDb < l + 2.0f)
+			{
+				pL = i;
 			}
-			if (lDb > l.db) {
-				nvgFillColor(args.vg, l.color);
-				nvgFill(args.vg);
+			else if (lDb < l)
+			{
+				nvgRect(vg, 3, i + 1, 5, 4);
+				mL = i;
 			}
 
-			nvgBeginPath(args.vg);
-			nvgRect(args.vg, 10, i + 1, 5, 4);
-			nvgFillColor(args.vg, bgColor);
-			nvgFill(args.vg);
-			if (rPeakDb > l.db && rPeakDb < l.db + 2.0f) {
-				nvgFillColor(args.vg, nvgRGBA(0x00, 0xdd, 0xff, 0xff));
-				nvgFill(args.vg);
+			if (rPeakDb > l && rPeakDb < l + 2.0f)
+			{
+				pR = i;
 			}
-			if (rDb > l.db) {
-				nvgFillColor(args.vg, l.color);
-				nvgFill(args.vg);
+			else if (rDb < l)
+			{
+				nvgRect(vg, 10, i + 1, 5, 4);
+				mR = i;
 			}
 		}
-		nvgRestore(args.vg);
+		nvgFillColor(vg, bgColor);
+		nvgFill(vg);
+
+		if (pL < 180)
+		{
+			nvgBeginPath(vg);
+			nvgRect(vg, 3, pL + 1, 5, 4);
+			nvgFillColor(args.vg, nvgRGBA(0x00, 0xdd, 0xff, 0xff));
+			nvgFill(vg);			
+		}
+		if (pR < 180)
+		{
+			nvgBeginPath(vg);
+			nvgRect(vg, 10, pR + 1, 5, 4);
+			nvgFillColor(args.vg, nvgRGBA(0x00, 0xdd, 0xff, 0xff));
+			nvgFill(vg);			
+		}
+
+		for (int i = mL+5; i < 180; i += 5) {
+			nvgBeginPath(vg);
+			nvgRect(vg, 3, i + 1, 5, 4);
+			nvgFillColor(vg, _levels.at(i / 5).color);
+			nvgFill(vg);
+		}
+
+		for (int i = mR+5; i < 180; i += 5) {
+			nvgBeginPath(vg);
+			nvgRect(vg, 10, i + 1, 5, 4);
+			nvgFillColor(vg, _levels.at(i / 5).color);
+			nvgFill(vg);
+		}
+
+		nvgRestore(vg);		
 	}
 };
 
